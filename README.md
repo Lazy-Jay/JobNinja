@@ -27,33 +27,38 @@
 
 ## 🚀 快速开始
 
-### 本地运行
+### 本地运行（推荐）
 
-直接双击 `index.html` 在浏览器中打开即可使用。
+**请勿直接双击 HTML 文件**，否则可能因 `file://` 协议限制导致 Service Worker 和部分功能异常。
 
-或者用任意本地服务器：
+用任意本地服务器启动：
 
 ```bash
-# Python 3
+# Python 3（Windows/macOS/Linux 通用）
+cd ai-job-assistant
 python -m http.server 8080
 
-# Node.js (需要先安装 http-server)
+# Node.js
 npx http-server -p 8080
 
 # VS Code Live Server 插件
 右键 index.html → Open with Live Server
 ```
 
-然后打开 `http://localhost:8080`
+然后浏览器访问 **http://localhost:8080**
 
-### Vercel 部署
+> **注意**：首次加载需要从 CDN 下载 Tailwind CSS 等资源，请确保网络畅通。国内用户如加载缓慢，可开启代理或使用 Vercel 部署。
 
-项目已包含 `vercel.json` 配置文件，可直接部署：
+### Vercel 部署（推荐国内用户）
+
+项目已包含 `vercel.json` 配置文件，一键部署到 Vercel（全球 CDN 加速）：
 
 ```bash
 npm i -g vercel
 vercel
 ```
+
+部署后即可通过 Vercel 提供的域名访问，速度更快。
 
 ## 📁 项目结构
 

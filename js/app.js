@@ -232,6 +232,15 @@
     updateModeIndicator();
     checkFirstRun();
 
+    // 隐藏加载覆盖层
+    var loadingEl = document.getElementById('loadingOverlay');
+    if (loadingEl) {
+      loadingEl.style.opacity = '0';
+      setTimeout(function () {
+        if (loadingEl.parentNode) loadingEl.parentNode.removeChild(loadingEl);
+      }, 350);
+    }
+
     console.log(
       '%c JobNinja v1.0.0 %c已就绪 %c|%c 本地模式 %c|%c 已注册 ' + panels.length + ' 个面板',
       'background:#10b981;color:#fff;padding:3px 8px;border-radius:4px 0 0 4px;',

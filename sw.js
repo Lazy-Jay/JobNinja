@@ -2,7 +2,7 @@
  * JobNinja — Service Worker v1.0
  * 离线缓存：核心文件缓存后可离线打开查看简历和求职记录
  */
-var CACHE_NAME = 'jobninja-v1.0.0-' + Date.now().toString(36);
+var CACHE_NAME = 'jobninja-v1.0.1';
 var CORE_FILES = [
   '.',
   'index.html',
@@ -54,19 +54,18 @@ self.addEventListener('fetch', function(event) {
   if (event.request.method !== 'GET') return;
   // 跳过CDN资源（由浏览器缓存处理）
   var url = event.request.url;
-  if (url.indexOf('cdn.') !== -1 || url.indexOf('unpkg.') !== -1) return;
+  if (url.indexOf('cdn.') !== -1 || url.indexOf('unpkg.') !== -1 || url.indexOf('jsdelivr.') !== -1) return;
 
   event.respondWith(
-    caches.match(event.request).then(function(cached) {
-      if (cached) return cached;
-      return fetch(event.request).then(function(response) {
-        if (!response || response.status !== 200 || response.type !== 'basic') return response;
-        var clone = response.clone();
-        caches.open(CACHE_NAME).then(function(cache) { cache.put(event.request, clone); });
-        return response;
-      }).catch(function() {
-        // 离线时返回空
-        return new Response('Offline', { status: 503 });
+    // 网络优先策略：在线时获取最新版本，离线时回退到缓存
+    fetch(event.request).then(function(response) {
+      if (!response || response.status !== 200 || response.type !== 'basic') return response;
+      var clone = response.clone();
+      caches.open(CACHE_NAME).then(function(cache) { cache.put(event.request, clone); });
+      return response;
+    }).catch(function() {
+      return caches.match(event.request).then(function(cached) {
+        return cached || new Response('Offline', { status: 503 });
       });
     })
   );
